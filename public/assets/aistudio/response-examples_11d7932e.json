@@ -1,0 +1,2392 @@
+{
+  "capturedAt": "2026-11-21T22:34:13.584Z",
+  "note": "Real responses from the local stack (arrays trimmed to 2 items, one-time secrets replaced). Keys: \"<METHOD> <path template>\".",
+  "examples": {
+    "GET /conversions/dialects": {
+      "status": 200,
+      "response": {
+        "dialects": [
+          {
+            "id": "cortex-xsiam:xql",
+            "name": "Cortex XSIAM XQL",
+            "language": "xql",
+            "aliases": ["cortex-xdr:xql"],
+            "source": true,
+            "target": true
+          },
+          {
+            "id": "splunk:spl",
+            "name": "Splunk SPL",
+            "language": "spl",
+            "aliases": [],
+            "source": true,
+            "target": true
+          }
+        ],
+        "modes": ["strict", "assisted"]
+      }
+    },
+    "GET /integrations/providers": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "key": "splunk",
+            "name": "Splunk Enterprise / Splunk Cloud",
+            "vendor": "Splunk",
+            "capabilities": ["rule.read", "rule.create"],
+            "dialects": ["splunk:spl"],
+            "credentialKinds": [
+              {
+                "kind": "splunk_token",
+                "description": "Splunk authentication token"
+              }
+            ],
+            "executionModes": ["DIRECT", "CONNECTOR"],
+            "configSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "baseUrl": {
+                  "type": "string",
+                  "maxLength": 2048,
+                  "format": "uri"
+                },
+                "app": {
+                  "default": "search",
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_.-]{1,80}$"
+                },
+                "owner": {
+                  "default": "nobody",
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9_.@-]{1,80}$"
+                },
+                "cronSchedule": {
+                  "default": "*/15 * * * *",
+                  "type": "string",
+                  "pattern": "^[0-9*/,\\- ]{9,64}$"
+                },
+                "earliestTime": {
+                  "default": "-20m",
+                  "type": "string",
+                  "pattern": "^[-+@a-zA-Z0-9]{1,32}$"
+                },
+                "latestTime": {
+                  "default": "now",
+                  "type": "string",
+                  "pattern": "^[-+@a-zA-Z0-9]{1,32}$"
+                },
+                "caCertificate": {
+                  "type": "string",
+                  "maxLength": 16384
+                }
+              },
+              "required": ["baseUrl"],
+              "additionalProperties": false
+            },
+            "notes": [
+              "Verified against a contract stub of the Splunk REST API, not against a live Splunk instance.",
+              "Rules are stored as scheduled saved searches named \"SEP-<rule id>\" in the configured app."
+            ]
+          },
+          {
+            "key": "cortex-xsiam",
+            "name": "Cortex XSIAM",
+            "vendor": "Palo Alto Networks",
+            "capabilities": ["rule.read", "rule.create"],
+            "dialects": ["cortex-xsiam:xql"],
+            "credentialKinds": [
+              {
+                "kind": "xsiam_api_key",
+                "description": "Cortex XSIAM API key"
+              }
+            ],
+            "executionModes": ["DIRECT", "CONNECTOR"],
+            "configSchema": {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "type": "object",
+              "properties": {
+                "baseUrl": {
+                  "type": "string",
+                  "maxLength": 2048,
+                  "format": "uri"
+                },
+                "apiKeyId": {
+                  "type": "string",
+                  "pattern": "^[0-9]{1,10}$"
+                },
+                "keyType": {
+                  "default": "advanced",
+                  "type": "string",
+                  "enum": ["standard", "advanced"]
+                },
+                "schedule": {
+                  "default": "10 minutes",
+                  "type": "string",
+                  "pattern": "^[0-9]{1,3} (minutes|hours?)$"
+                },
+                "searchWindow": {
+                  "default": "20 minutes",
+                  "type": "string",
+                  "pattern": "^[0-9]{1,3} (minutes|hours?|days?)$"
+                },
+                "timezone": {
+                  "default": "UTC",
+                  "type": "string",
+                  "pattern": "^[A-Za-z_/+-]{1,64}$"
+                },
+                "alertCategory": {
+                  "default": "OTHER",
+                  "type": "string",
+                  "pattern": "^[A-Z_]{1,64}$"
+                },
+                "caCertificate": {
+                  "type": "string",
+                  "maxLength": 16384
+                }
+              },
+              "required": ["baseUrl", "apiKeyId"],
+              "additionalProperties": false
+            },
+            "notes": [
+              "Verified against a contract stub of the XSIAM public API, not against a live tenant.",
+              "No parse-only endpoint exists; XQL syntax is validated by the platform converter."
+            ]
+          }
+        ]
+      }
+    },
+    "GET /mitre/tactics": {
+      "status": 200,
+      "response": {
+        "version": "19.2",
+        "items": [
+          {
+            "id": "TA0043",
+            "shortName": "reconnaissance",
+            "name": "Reconnaissance"
+          },
+          {
+            "id": "TA0042",
+            "shortName": "resource-development",
+            "name": "Resource Development"
+          }
+        ]
+      }
+    },
+    "GET /mitre/techniques?tactic=credential-access": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "T1003",
+            "name": "OS Credential Dumping",
+            "parentId": null,
+            "tactics": ["credential-access"],
+            "platforms": ["Linux", "Windows"]
+          },
+          {
+            "id": "T1003.001",
+            "name": "LSASS Memory",
+            "parentId": "T1003",
+            "tactics": ["credential-access"],
+            "platforms": ["Windows"]
+          }
+        ],
+        "nextCursor": "eyJwIjoyfQ"
+      }
+    },
+    "GET /plans": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "key": "community",
+            "name": "Community",
+            "description": "Individuals and small teams getting started",
+            "trialDays": 0,
+            "priceMonthlyCents": 0,
+            "currency": "USD",
+            "entitlements": {
+              "api.service_accounts": 0,
+              "deployments.advanced": 0,
+              "git.dedicated_instance": 0,
+              "security.mfa_enforcement": 0,
+              "identity.scim": 0,
+              "sso.enterprise": 0,
+              "audit.retention_days": 30,
+              "connectors.max": 1,
+              "integrations.max": 2,
+              "storage.bytes": 1073741824,
+              "api.requests.monthly": 100000,
+              "conversions.monthly": 200,
+              "repositories.private.max": 10,
+              "seats.max": 5
+            }
+          },
+          {
+            "key": "team",
+            "name": "Team",
+            "description": "SOC and detection-engineering teams",
+            "trialDays": 14,
+            "priceMonthlyCents": 4900,
+            "currency": "USD",
+            "entitlements": {
+              "api.service_accounts": 20,
+              "deployments.advanced": 1,
+              "git.dedicated_instance": 0,
+              "security.mfa_enforcement": 1,
+              "identity.scim": 0,
+              "sso.enterprise": 0,
+              "audit.retention_days": 365,
+              "connectors.max": 10,
+              "integrations.max": 20,
+              "storage.bytes": 53687091200,
+              "api.requests.monthly": 2000000,
+              "conversions.monthly": 10000,
+              "repositories.private.max": 200,
+              "seats.max": 50
+            }
+          }
+        ]
+      }
+    },
+    "GET /repositories/by-path/{owner}/{name}": {
+      "status": 200,
+      "response": {
+        "id": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+        "tenantId": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "owner": "ex-181748",
+        "name": "detections",
+        "fullName": "ex-181748/detections",
+        "description": "Production detections",
+        "visibility": "PRIVATE",
+        "status": "ACTIVE",
+        "defaultBranch": "main",
+        "forkedFromId": null,
+        "cloneUrls": {
+          "https": "http://localhost:13000/git/ex-181748/detections.git",
+          "ssh": "ssh://git@localhost:12222/ex-181748/detections.git"
+        },
+        "createdAt": "2026-11-21T22:34:04.168Z",
+        "updatedAt": "2026-11-21T22:34:04.536Z"
+      }
+    },
+    "GET /roles": {
+      "status": 200,
+      "response": [
+        {
+          "key": "organization.admin",
+          "name": "Organization administrator",
+          "description": "Manages one organization, its teams, repositories and rules",
+          "scope": "ORGANIZATION",
+          "permissions": ["connector.manage", "connector.read"]
+        },
+        {
+          "key": "organization.deployment_approver",
+          "name": "Deployment approver",
+          "description": "Reviews and approves rule deployments in one organization",
+          "scope": "ORGANIZATION",
+          "permissions": ["connector.read", "deployment.approve"]
+        }
+      ]
+    },
+    "GET /tenants": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "1df3b9b8-5811-406d-ba9b-b5f2d0e4f46b",
+            "slug": "exowner-5a4ea276",
+            "name": "exowner Test",
+            "kind": "INDIVIDUAL",
+            "status": "ACTIVE",
+            "createdAt": "2026-11-21T22:34:01.664Z"
+          },
+          {
+            "id": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+            "slug": "ex-181748",
+            "name": "Example SOC",
+            "kind": "TEAM",
+            "status": "ACTIVE",
+            "createdAt": "2026-11-21T22:34:01.812Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}": {
+      "status": 200,
+      "response": {
+        "id": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+        "slug": "ex-181748",
+        "name": "Example SOC",
+        "kind": "TEAM",
+        "status": "ACTIVE",
+        "createdAt": "2026-11-21T22:34:01.812Z"
+      }
+    },
+    "GET /tenants/{tenantId}/audit-logs": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "52c53e1a-8594-49d4-8abd-774326999ade",
+            "action": "team.member.added",
+            "actorUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "targetType": "team",
+            "targetId": "8a820d93-fc85-43db-ba97-6599a4ba0280",
+            "requestId": "2b0aee02-89ed-4467-ae6b-42f68b51dd72",
+            "metadata": {
+              "userId": "c7b03327-f289-47b5-8dbc-ebbb6286deef"
+            },
+            "createdAt": "2026-11-21T22:34:02.574Z"
+          },
+          {
+            "id": "4010d4aa-ada2-4595-80b8-8e7125151605",
+            "action": "team.created",
+            "actorUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "targetType": "team",
+            "targetId": "8a820d93-fc85-43db-ba97-6599a4ba0280",
+            "requestId": "80966c3b-bee0-49e0-82ab-dec120ab9d57",
+            "metadata": {
+              "slug": "detection",
+              "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e"
+            },
+            "createdAt": "2026-11-21T22:34:02.376Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/audit-logs (member without permission → 403)": {
+      "status": 403,
+      "response": {
+        "error": {
+          "code": "FORBIDDEN",
+          "message": "Forbidden",
+          "requestId": "d124f0b5-caf1-493e-a823-8e9d62bece5e"
+        }
+      }
+    },
+    "GET /tenants/{tenantId}/members": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "user": {
+              "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+              "username": "exowner-5a4ea276",
+              "displayName": "exowner Test"
+            },
+            "status": "ACTIVE",
+            "roles": [
+              {
+                "id": "ca023281-5135-4fc3-84df-54b48eea9a13",
+                "roleKey": "tenant.owner",
+                "scope": "TENANT",
+                "principalType": "user",
+                "principalId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+                "organizationId": null,
+                "teamId": null,
+                "repositoryId": null,
+                "createdAt": "2026-11-21T22:34:01.813Z"
+              },
+              {
+                "id": "dac52377-691f-46d5-9ab3-e65785800757",
+                "roleKey": "organization.admin",
+                "scope": "ORGANIZATION",
+                "principalType": "user",
+                "principalId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+                "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+                "teamId": null,
+                "repositoryId": null,
+                "createdAt": "2026-11-21T22:34:01.813Z"
+              }
+            ],
+            "joinedAt": "2026-11-21T22:34:01.813Z"
+          },
+          {
+            "user": {
+              "id": "c7b03327-f289-47b5-8dbc-ebbb6286deef",
+              "username": "exmember-138c23c5",
+              "displayName": "exmember Test"
+            },
+            "status": "ACTIVE",
+            "roles": [
+              {
+                "id": "9a81e27e-1a92-44c7-bc4d-5e5e05936ee7",
+                "roleKey": "tenant.member",
+                "scope": "TENANT",
+                "principalType": "user",
+                "principalId": "c7b03327-f289-47b5-8dbc-ebbb6286deef",
+                "organizationId": null,
+                "teamId": null,
+                "repositoryId": null,
+                "createdAt": "2026-11-21T22:34:02.220Z"
+              }
+            ],
+            "joinedAt": "2026-11-21T22:34:02.220Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "tenantId": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+            "slug": "ex-181748",
+            "name": "Example SOC",
+            "description": null,
+            "createdAt": "2026-11-21T22:34:01.812Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}": {
+      "status": 200,
+      "response": {
+        "id": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "tenantId": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+        "slug": "ex-181748",
+        "name": "Example SOC",
+        "description": null,
+        "createdAt": "2026-11-21T22:34:01.812Z"
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/connectors": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "0959081c-8262-4e28-8496-21cd1fe57afc",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "name": "dc1-agent",
+            "description": "Data centre 1",
+            "status": "ACTIVE",
+            "health": "PENDING",
+            "lastSeenAt": null,
+            "healthChangedAt": null,
+            "createdAt": "2026-11-21T22:34:13.026Z",
+            "updatedAt": "2026-11-21T22:34:13.026Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/connectors/{connectorId}": {
+      "status": 200,
+      "response": {
+        "id": "0959081c-8262-4e28-8496-21cd1fe57afc",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "name": "dc1-agent",
+        "description": "Data centre 1",
+        "status": "ACTIVE",
+        "health": "PENDING",
+        "lastSeenAt": null,
+        "healthChangedAt": null,
+        "createdAt": "2026-11-21T22:34:13.026Z",
+        "updatedAt": "2026-11-21T22:34:13.026Z",
+        "instances": []
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/connectors/{connectorId}/jobs": {
+      "status": 200,
+      "response": {
+        "items": [],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/conversions": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "b9930161-66ce-403e-9923-cf279266c86c",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "sourceDialect": "microsoft-sentinel:kql",
+            "targetDialect": "splunk:spl",
+            "mode": "strict",
+            "status": "SUCCEEDED",
+            "source": {
+              "type": "query"
+            },
+            "sourceQuery": "DeviceProcessEvents\n| where FileName =~ \"powershell.exe\" and ProcessCommandLine contains \"-enc\"",
+            "fieldMappingSetId": null,
+            "options": {
+              "xqlCaseSensitive": null
+            },
+            "errorCode": null,
+            "createdByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "createdAt": "2026-11-21T22:34:11.614Z",
+            "startedAt": "2026-11-21T22:34:11.619Z",
+            "completedAt": "2026-11-21T22:34:11.624Z",
+            "result": {
+              "status": "SUCCEEDED",
+              "method": "deterministic",
+              "query": "tag=process tag=report process_name=\"powershell.exe\" process=\"*-enc*\"",
+              "warnings": [],
+              "unsupported": [],
+              "fieldMappings": [
+                {
+                  "status": "mapped",
+                  "sourceField": "FileName",
+                  "targetField": "process_name",
+                  "canonicalField": "process.name"
+                },
+                {
+                  "status": "mapped",
+                  "sourceField": "ProcessCommandLine",
+                  "targetField": "process",
+                  "canonicalField": "process.command_line"
+                }
+              ],
+              "semanticDifferences": [],
+              "validation": {
+                "diagnostics": [],
+                "targetSyntaxValid": true,
+                "roundTripEquivalent": true
+              },
+              "reviewRequired": false,
+              "error": null,
+              "logicalSource": "edr.process",
+              "ai": null,
+              "engineVersion": "0.2.0",
+              "profile": {
+                "name": "default",
+                "version": "2026.11.1"
+              },
+              "createdAt": "2026-11-21T22:34:11.623Z"
+            }
+          },
+          {
+            "id": "980ffb50-0c6a-49e5-8ec6-0bd91c1a412f",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "sourceDialect": "splunk:spl",
+            "targetDialect": "cortex-xsiam:xql",
+            "mode": "strict",
+            "status": "FAILED",
+            "source": {
+              "type": "query"
+            },
+            "sourceQuery": "index=windows EventCode=4625 | stats count by user",
+            "fieldMappingSetId": null,
+            "options": {
+              "xqlCaseSensitive": null
+            },
+            "errorCode": "mapping.source_unmapped",
+            "createdByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "createdAt": "2026-11-21T22:34:11.414Z",
+            "startedAt": "2026-11-21T22:34:11.427Z",
+            "completedAt": "2026-11-21T22:34:11.435Z",
+            "result": {
+              "status": "FAILED",
+              "method": "none",
+              "query": null,
+              "warnings": [],
+              "unsupported": [],
+              "fieldMappings": [],
+              "semanticDifferences": [],
+              "validation": {
+                "diagnostics": [],
+                "targetSyntaxValid": null,
+                "roundTripEquivalent": null
+              },
+              "reviewRequired": true,
+              "error": {
+                "code": "mapping.source_unmapped",
+                "message": "The query's data source does not match any source in the mapping profile (check the dataset/table/index and the selecting conditions, or add a source override)",
+                "severity": "error"
+              },
+              "logicalSource": null,
+              "ai": null,
+              "engineVersion": "0.2.0",
+              "profile": {
+                "name": "default",
+                "version": "2026.11.1"
+              },
+              "createdAt": "2026-11-21T22:34:11.434Z"
+            }
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/conversions/{conversionId} (failed: unmapped field)": {
+      "status": 200,
+      "response": {
+        "id": "980ffb50-0c6a-49e5-8ec6-0bd91c1a412f",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "sourceDialect": "splunk:spl",
+        "targetDialect": "cortex-xsiam:xql",
+        "mode": "strict",
+        "status": "FAILED",
+        "source": {
+          "type": "query"
+        },
+        "sourceQuery": "index=windows EventCode=4625 | stats count by user",
+        "fieldMappingSetId": null,
+        "options": {
+          "xqlCaseSensitive": null
+        },
+        "errorCode": "mapping.source_unmapped",
+        "createdByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "createdAt": "2026-11-21T22:34:11.414Z",
+        "startedAt": "2026-11-21T22:34:11.427Z",
+        "completedAt": "2026-11-21T22:34:11.435Z",
+        "result": {
+          "status": "FAILED",
+          "method": "none",
+          "query": null,
+          "warnings": [],
+          "unsupported": [],
+          "fieldMappings": [],
+          "semanticDifferences": [],
+          "validation": {
+            "diagnostics": [],
+            "targetSyntaxValid": null,
+            "roundTripEquivalent": null
+          },
+          "reviewRequired": true,
+          "error": {
+            "code": "mapping.source_unmapped",
+            "message": "The query's data source does not match any source in the mapping profile (check the dataset/table/index and the selecting conditions, or add a source override)",
+            "severity": "error"
+          },
+          "logicalSource": null,
+          "ai": null,
+          "engineVersion": "0.2.0",
+          "profile": {
+            "name": "default",
+            "version": "2026.11.1"
+          },
+          "createdAt": "2026-11-21T22:34:11.434Z"
+        }
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/conversions/{conversionId} (succeeded)": {
+      "status": 200,
+      "response": {
+        "id": "b9930161-66ce-403e-9923-cf279266c86c",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "sourceDialect": "microsoft-sentinel:kql",
+        "targetDialect": "splunk:spl",
+        "mode": "strict",
+        "status": "SUCCEEDED",
+        "source": {
+          "type": "query"
+        },
+        "sourceQuery": "DeviceProcessEvents\n| where FileName =~ \"powershell.exe\" and ProcessCommandLine contains \"-enc\"",
+        "fieldMappingSetId": null,
+        "options": {
+          "xqlCaseSensitive": null
+        },
+        "errorCode": null,
+        "createdByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "createdAt": "2026-11-21T22:34:11.614Z",
+        "startedAt": "2026-11-21T22:34:11.619Z",
+        "completedAt": "2026-11-21T22:34:11.624Z",
+        "result": {
+          "status": "SUCCEEDED",
+          "method": "deterministic",
+          "query": "tag=process tag=report process_name=\"powershell.exe\" process=\"*-enc*\"",
+          "warnings": [],
+          "unsupported": [],
+          "fieldMappings": [
+            {
+              "status": "mapped",
+              "sourceField": "FileName",
+              "targetField": "process_name",
+              "canonicalField": "process.name"
+            },
+            {
+              "status": "mapped",
+              "sourceField": "ProcessCommandLine",
+              "targetField": "process",
+              "canonicalField": "process.command_line"
+            }
+          ],
+          "semanticDifferences": [],
+          "validation": {
+            "diagnostics": [],
+            "targetSyntaxValid": true,
+            "roundTripEquivalent": true
+          },
+          "reviewRequired": false,
+          "error": null,
+          "logicalSource": "edr.process",
+          "ai": null,
+          "engineVersion": "0.2.0",
+          "profile": {
+            "name": "default",
+            "version": "2026.11.1"
+          },
+          "createdAt": "2026-11-21T22:34:11.623Z"
+        }
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/deployment-policy": {
+      "status": 200,
+      "response": {
+        "id": "84e72659-5f2c-4123-aa6b-42bad1cde4cf",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "productionApprovals": 1,
+        "nonProductionApprovals": 0,
+        "allowSelfApprovalNonProduction": false,
+        "allowWarningRules": false,
+        "deploymentsEnabled": true,
+        "version": 1,
+        "updatedByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "updatedAt": "2026-11-21T22:34:12.475Z"
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/deployments": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "2d20cb54-30c8-44de-8b68-76e32496be3d",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "integrationId": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+            "action": "DEPLOY",
+            "operation": "deploy",
+            "status": "PENDING_APPROVAL",
+            "environment": "PRODUCTION",
+            "executionMode": "DIRECT",
+            "rule": {
+              "repositoryId": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+              "ruleId": "a1984471-47fc-4a7f-be83-dc84f89aebbe",
+              "uid": "7c9e2f41-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+              "name": "Many failed logons",
+              "severity": "MEDIUM",
+              "commitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+              "blobSha": "c4da5022c6cf577a062cc197bb1c4389911a614e",
+              "dialect": "splunk:spl",
+              "query": "index=windows EventCode=4625 | stats count by user | where count > 20\n"
+            },
+            "rollbackOfId": null,
+            "requiredApprovals": 1,
+            "allowSelfApproval": false,
+            "approvals": [],
+            "requestedByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "externalId": null,
+            "errorCode": null,
+            "attempts": 0,
+            "createdAt": "2026-11-21T22:34:12.607Z",
+            "approvedAt": null,
+            "startedAt": null,
+            "completedAt": null
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/deployments/{deploymentId}": {
+      "status": 200,
+      "response": {
+        "id": "2d20cb54-30c8-44de-8b68-76e32496be3d",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "integrationId": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+        "action": "DEPLOY",
+        "operation": "deploy",
+        "status": "PENDING_APPROVAL",
+        "environment": "PRODUCTION",
+        "executionMode": "DIRECT",
+        "rule": {
+          "repositoryId": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+          "ruleId": "a1984471-47fc-4a7f-be83-dc84f89aebbe",
+          "uid": "7c9e2f41-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+          "name": "Many failed logons",
+          "severity": "MEDIUM",
+          "commitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+          "blobSha": "c4da5022c6cf577a062cc197bb1c4389911a614e",
+          "dialect": "splunk:spl",
+          "query": "index=windows EventCode=4625 | stats count by user | where count > 20\n"
+        },
+        "rollbackOfId": null,
+        "requiredApprovals": 1,
+        "allowSelfApproval": false,
+        "approvals": [],
+        "requestedByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "externalId": null,
+        "errorCode": null,
+        "attempts": 0,
+        "createdAt": "2026-11-21T22:34:12.607Z",
+        "approvedAt": null,
+        "startedAt": null,
+        "completedAt": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/deployments/{deploymentId}/logs": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "c1a4a831-d090-4f5f-846f-43950b0156a3",
+            "level": "info",
+            "event": "deployment.requested",
+            "message": "Deployment requested",
+            "data": {
+              "environment": "PRODUCTION",
+              "requiredApprovals": 1
+            },
+            "createdAt": "2026-11-21T22:34:12.608Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/field-mappings": {
+      "status": 200,
+      "response": {
+        "items": [],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/integrations": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "name": "Splunk production",
+            "provider": "splunk",
+            "environment": "PRODUCTION",
+            "executionMode": "DIRECT",
+            "connectorId": null,
+            "config": {
+              "app": "search",
+              "owner": "nobody",
+              "baseUrl": "http://fake-siem:8088",
+              "latestTime": "now",
+              "cronSchedule": "*/15 * * * *",
+              "earliestTime": "-20m"
+            },
+            "status": "ACTIVE",
+            "health": "UNKNOWN",
+            "healthCheckedAt": null,
+            "capabilities": ["rule.read", "rule.create"],
+            "credential": null,
+            "version": 1,
+            "createdAt": "2026-11-21T22:34:12.009Z",
+            "updatedAt": "2026-11-21T22:34:12.009Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/integrations/{integrationId}": {
+      "status": 200,
+      "response": {
+        "id": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "name": "Splunk production",
+        "provider": "splunk",
+        "environment": "PRODUCTION",
+        "executionMode": "DIRECT",
+        "connectorId": null,
+        "config": {
+          "app": "search",
+          "owner": "nobody",
+          "baseUrl": "http://fake-siem:8088",
+          "latestTime": "now",
+          "cronSchedule": "*/15 * * * *",
+          "earliestTime": "-20m"
+        },
+        "status": "ACTIVE",
+        "health": "UNKNOWN",
+        "healthCheckedAt": null,
+        "capabilities": ["rule.read", "rule.create"],
+        "credential": {
+          "kind": "splunk_token",
+          "rotatedAt": "2026-11-21T22:34:12.146Z"
+        },
+        "version": 1,
+        "createdAt": "2026-11-21T22:34:12.009Z",
+        "updatedAt": "2026-11-21T22:34:12.148Z"
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/integrations/{integrationId}/events": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "e12d09c7-51fb-497b-9c2e-ff159c5c051d",
+            "type": "health.checked",
+            "actorUserId": null,
+            "data": {
+              "via": "direct",
+              "healthy": false,
+              "errorCode": "integration.auth_failed",
+              "correlationId": "1280fb52-6656-4c79-969e-c03448de151f"
+            },
+            "createdAt": "2026-11-21T22:34:12.332Z"
+          },
+          {
+            "id": "2cb5770f-55cb-4d2a-9a32-fdca160eab7e",
+            "type": "credential.set",
+            "actorUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "data": {
+              "kind": "splunk_token",
+              "kekId": "k1"
+            },
+            "createdAt": "2026-11-21T22:34:12.150Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/repositories": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+            "tenantId": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "owner": "ex-181748",
+            "name": "detections",
+            "fullName": "ex-181748/detections",
+            "description": "Production detections",
+            "visibility": "PRIVATE",
+            "status": "ACTIVE",
+            "defaultBranch": "main",
+            "forkedFromId": null,
+            "cloneUrls": {
+              "https": "http://localhost:13000/git/ex-181748/detections.git",
+              "ssh": "ssh://git@localhost:12222/ex-181748/detections.git"
+            },
+            "createdAt": "2026-11-21T22:34:04.168Z",
+            "updatedAt": "2026-11-21T22:34:04.438Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/teams": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "8a820d93-fc85-43db-ba97-6599a4ba0280",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "slug": "detection",
+            "name": "Detection engineering",
+            "description": null,
+            "createdAt": "2026-11-21T22:34:02.371Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/teams/{teamId}/members": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "user": {
+              "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+              "username": "exowner-5a4ea276",
+              "displayName": "exowner Test"
+            },
+            "addedAt": "2026-11-21T22:34:02.372Z"
+          },
+          {
+            "user": {
+              "id": "c7b03327-f289-47b5-8dbc-ebbb6286deef",
+              "username": "exmember-138c23c5",
+              "displayName": "exmember Test"
+            },
+            "addedAt": "2026-11-21T22:34:02.573Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/webhooks": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "3071f5df-4895-4a80-a7a2-c6d837f88234",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "url": "http://fake-siem:8088/webhooks/example",
+            "description": null,
+            "events": ["deployment.succeeded", "conversion.completed"],
+            "status": "ACTIVE",
+            "disabledReason": null,
+            "consecutiveFailures": 0,
+            "version": 1,
+            "createdAt": "2026-11-21T22:34:13.370Z",
+            "updatedAt": "2026-11-21T22:34:13.370Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/organizations/{organizationId}/webhooks/{webhookId}/deliveries": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "f6700bdc-0b8e-4583-93aa-9f573e57d29f",
+            "eventId": "cee17c6f-6185-4247-b032-66a91e994219",
+            "eventType": "webhook.ping",
+            "status": "SUCCEEDED",
+            "attempts": 1,
+            "responseStatus": 200,
+            "errorCode": null,
+            "createdAt": "2026-11-21T22:34:13.515Z",
+            "lastAttemptAt": "2026-11-21T22:34:13.519Z",
+            "deliveredAt": "2026-11-21T22:34:13.519Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}": {
+      "status": 200,
+      "response": {
+        "id": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+        "tenantId": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "owner": "ex-181748",
+        "name": "detections",
+        "fullName": "ex-181748/detections",
+        "description": "Production detections",
+        "visibility": "PRIVATE",
+        "status": "ACTIVE",
+        "defaultBranch": "main",
+        "forkedFromId": null,
+        "cloneUrls": {
+          "https": "http://localhost:13000/git/ex-181748/detections.git",
+          "ssh": "ssh://git@localhost:12222/ex-181748/detections.git"
+        },
+        "createdAt": "2026-11-21T22:34:04.168Z",
+        "updatedAt": "2026-11-21T22:34:04.536Z"
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId} (unknown id → 404)": {
+      "status": 404,
+      "response": {
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Not Found",
+          "requestId": "0d988094-892f-4d6f-a61d-c655b1895cd5"
+        }
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/branch-protections": {
+      "status": 200,
+      "response": []
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/branches": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "name": "main",
+            "protected": false,
+            "commitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+            "commitMessage": "Add LSASS detection"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/commits": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "sha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+            "message": "Add LSASS detection\n",
+            "authorName": "SEP Test",
+            "authorEmail": "test@example.test",
+            "authoredAt": "2026-11-22T02:34:04+04:00",
+            "author": null,
+            "parents": ["47f7f25591cb8b1fbc48b9051d0ca15ca098253d"]
+          },
+          {
+            "sha": "47f7f25591cb8b1fbc48b9051d0ca15ca098253d",
+            "message": "Initial commit\n",
+            "authorName": "sep-platform",
+            "authorEmail": "sep-platform@forgejo.internal",
+            "authoredAt": "2026-11-21T22:34:04Z",
+            "author": {
+              "id": null,
+              "username": "system"
+            },
+            "parents": []
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/issues": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "number": 2,
+            "title": "False positives from EDR scanner",
+            "body": "Tune exclusions.",
+            "state": "open",
+            "author": {
+              "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+              "username": "exowner-5a4ea276"
+            },
+            "comments": 0,
+            "createdAt": "2026-11-21T22:34:10Z",
+            "updatedAt": "2026-11-21T22:34:10Z",
+            "closedAt": null
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/issues/{number}/comments": {
+      "status": 200,
+      "response": [
+        {
+          "id": 92,
+          "body": "Working on it.",
+          "author": {
+            "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "username": "exowner-5a4ea276"
+          },
+          "createdAt": "2026-11-21T22:34:10Z"
+        }
+      ]
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/labels": {
+      "status": 200,
+      "response": [
+        {
+          "id": 18,
+          "name": "tuning",
+          "color": "#0e8a16",
+          "description": ""
+        }
+      ]
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/milestones": {
+      "status": 200,
+      "response": []
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/pulls": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "number": 1,
+            "title": "Raise LSASS severity",
+            "body": "Seen in the wild.",
+            "state": "open",
+            "author": {
+              "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+              "username": "exowner-5a4ea276"
+            },
+            "head": "feature/tuning-2",
+            "headSha": "291dde9a92d3633f7e3430f3a6219f88b847100b",
+            "base": "main",
+            "mergeable": true,
+            "mergeCommitSha": null,
+            "mergedBy": null,
+            "mergedAt": null,
+            "createdAt": "2026-11-21T22:34:09Z",
+            "updatedAt": "2026-11-21T22:34:09Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/pulls/{number}": {
+      "status": 200,
+      "response": {
+        "number": 1,
+        "title": "Raise LSASS severity",
+        "body": "Seen in the wild.",
+        "state": "open",
+        "author": {
+          "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+          "username": "exowner-5a4ea276"
+        },
+        "head": "feature/tuning-2",
+        "headSha": "291dde9a92d3633f7e3430f3a6219f88b847100b",
+        "base": "main",
+        "mergeable": true,
+        "mergeCommitSha": null,
+        "mergedBy": null,
+        "mergedAt": null,
+        "createdAt": "2026-11-21T22:34:09Z",
+        "updatedAt": "2026-11-21T22:34:09Z"
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/pulls/{number}/files": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "path": "rules/windows/lsass.yml",
+            "status": "changed",
+            "additions": 1,
+            "deletions": 1,
+            "previousPath": null
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/pulls/{number}/reviews": {
+      "status": 200,
+      "response": []
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/releases": {
+      "status": 200,
+      "response": {
+        "items": [],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/rules": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "a1984471-47fc-4a7f-be83-dc84f89aebbe",
+            "ruleUid": "7c9e2f41-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+            "name": "Many failed logons",
+            "format": "SEP_DETECTION_V1",
+            "severity": "MEDIUM",
+            "status": "TEST",
+            "queryLanguage": "spl",
+            "dialect": "splunk:spl",
+            "path": "rules/splunk/failed_logons.yml",
+            "validationStatus": "VALID",
+            "deploymentStatus": "NOT_DEPLOYED",
+            "tactics": ["TA0006"],
+            "techniques": ["T1110"],
+            "currentCommitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+            "updatedAt": "2026-11-21T22:34:07.607Z"
+          },
+          {
+            "id": "94f40249-e923-4c4f-94aa-7e94e21b558d",
+            "ruleUid": "3f0c2a10-5d4b-4e8f-9a61-0c1d2e3f4a5b",
+            "name": "LSASS memory access",
+            "format": "SEP_DETECTION_V1",
+            "severity": "HIGH",
+            "status": "STABLE",
+            "queryLanguage": "xql",
+            "dialect": "cortex-xsiam:xql",
+            "path": "rules/windows/lsass.yml",
+            "validationStatus": "VALID",
+            "deploymentStatus": "NOT_DEPLOYED",
+            "tactics": ["TA0006"],
+            "techniques": ["T1003.001"],
+            "currentCommitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+            "updatedAt": "2026-11-21T22:34:07.607Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/rules/{ruleId}": {
+      "status": 200,
+      "response": {
+        "id": "94f40249-e923-4c4f-94aa-7e94e21b558d",
+        "ruleUid": "3f0c2a10-5d4b-4e8f-9a61-0c1d2e3f4a5b",
+        "name": "LSASS memory access",
+        "format": "SEP_DETECTION_V1",
+        "severity": "HIGH",
+        "status": "STABLE",
+        "queryLanguage": "xql",
+        "dialect": "cortex-xsiam:xql",
+        "path": "rules/windows/lsass.yml",
+        "validationStatus": "VALID",
+        "deploymentStatus": "NOT_DEPLOYED",
+        "tactics": ["TA0006"],
+        "techniques": ["T1003.001"],
+        "currentCommitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+        "updatedAt": "2026-11-21T22:34:07.607Z",
+        "description": "Handle requests to lsass.exe by unusual processes",
+        "author": "SOC",
+        "category": null,
+        "queryText": "dataset = xdr_data\n| filter event_type = ENUM.PROCESS and action_process_image_name = \"lsass.exe\"\n",
+        "platforms": ["cortex-xsiam"],
+        "telemetry": ["process_access"],
+        "dataSources": ["Cortex XDR Agent"],
+        "tags": [],
+        "falsePositives": ["EDR scanners"],
+        "references": ["https://attack.mitre.org/techniques/T1003/001/"],
+        "validationIssues": [],
+        "repository": {
+          "id": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+          "fullName": "ex-181748/detections"
+        }
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/rules/{ruleId}/versions": {
+      "status": 200,
+      "response": [
+        {
+          "id": "efa60a97-bd11-41a3-9b13-1a728af05495",
+          "commitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+          "path": "rules/windows/lsass.yml",
+          "validationStatus": "VALID",
+          "validationIssues": [],
+          "document": {
+            "uid": "3f0c2a10-5d4b-4e8f-9a61-0c1d2e3f4a5b",
+            "name": "LSASS memory access",
+            "tags": [],
+            "query": {
+              "text": "dataset = xdr_data\n| filter event_type = ENUM.PROCESS and action_process_image_name = \"lsass.exe\"\n",
+              "dialect": "cortex-xsiam:xql",
+              "language": "xql"
+            },
+            "author": "SOC",
+            "format": "sep.detection/v1",
+            "status": "stable",
+            "tactics": ["TA0006"],
+            "category": null,
+            "severity": "high",
+            "platforms": ["cortex-xsiam"],
+            "telemetry": ["process_access"],
+            "references": ["https://attack.mitre.org/techniques/T1003/001/"],
+            "techniques": ["T1003.001"],
+            "dataSources": ["Cortex XDR Agent"],
+            "description": "Handle requests to lsass.exe by unusual processes",
+            "falsePositives": ["EDR scanners"]
+          },
+          "createdAt": "2026-11-21T22:34:07.605Z"
+        }
+      ]
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/rules/index-status": {
+      "status": 200,
+      "response": {
+        "status": "INDEXING",
+        "commitSha": "47f7f25591cb8b1fbc48b9051d0ca15ca098253d",
+        "indexedAt": "2026-11-21T22:34:04.536Z",
+        "report": {
+          "rules": 0,
+          "changed": 0,
+          "deleted": 0,
+          "commitSha": "47f7f25591cb8b1fbc48b9051d0ca15ca098253d",
+          "truncated": false,
+          "candidates": 0,
+          "duplicates": [],
+          "invalidFiles": []
+        }
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/rules/validation": {
+      "status": 200,
+      "response": {
+        "commitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+        "truncated": false,
+        "summary": {
+          "files": 2,
+          "valid": 2,
+          "warning": 0,
+          "invalid": 0
+        },
+        "files": [
+          {
+            "path": "rules/splunk/failed_logons.yml",
+            "ruleUid": "7c9e2f41-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+            "name": "Many failed logons",
+            "validationStatus": "VALID",
+            "issues": []
+          },
+          {
+            "path": "rules/windows/lsass.yml",
+            "ruleUid": "3f0c2a10-5d4b-4e8f-9a61-0c1d2e3f4a5b",
+            "name": "LSASS memory access",
+            "validationStatus": "VALID",
+            "issues": []
+          }
+        ]
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/star": {
+      "status": 200,
+      "response": {
+        "starred": true
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/stargazers": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "username": "exowner-5a4ea276"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/subscription": {
+      "status": 200,
+      "response": {
+        "watching": false
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/tags": {
+      "status": 200,
+      "response": {
+        "items": [],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/repositories/{repositoryId}/wiki/pages (no wiki yet → 404)": {
+      "status": 404,
+      "response": {
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "Not Found",
+          "requestId": "25d85482-770d-4211-b8f1-9619367deb07"
+        }
+      }
+    },
+    "GET /tenants/{tenantId}/role-assignments": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "ca023281-5135-4fc3-84df-54b48eea9a13",
+            "roleKey": "tenant.owner",
+            "scope": "TENANT",
+            "principalType": "user",
+            "principalId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "organizationId": null,
+            "teamId": null,
+            "repositoryId": null,
+            "createdAt": "2026-11-21T22:34:01.813Z"
+          },
+          {
+            "id": "dac52377-691f-46d5-9ab3-e65785800757",
+            "roleKey": "organization.admin",
+            "scope": "ORGANIZATION",
+            "principalType": "user",
+            "principalId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+            "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+            "teamId": null,
+            "repositoryId": null,
+            "createdAt": "2026-11-21T22:34:01.813Z"
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/rules/coverage": {
+      "status": 200,
+      "response": {
+        "catalogVersion": "19.2",
+        "totalRules": 2,
+        "tactics": [
+          {
+            "id": "TA0043",
+            "shortName": "reconnaissance",
+            "name": "Reconnaissance",
+            "covered": 0,
+            "total": 12,
+            "techniques": [
+              {
+                "id": "T1589",
+                "name": "Gather Victim Identity Information",
+                "rules": 0,
+                "subTechniqueRules": 0
+              },
+              {
+                "id": "T1590",
+                "name": "Gather Victim Network Information",
+                "rules": 0,
+                "subTechniqueRules": 0
+              }
+            ]
+          },
+          {
+            "id": "TA0042",
+            "shortName": "resource-development",
+            "name": "Resource Development",
+            "covered": 0,
+            "total": 9,
+            "techniques": [
+              {
+                "id": "T1583",
+                "name": "Acquire Infrastructure",
+                "rules": 0,
+                "subTechniqueRules": 0
+              },
+              {
+                "id": "T1584",
+                "name": "Compromise Infrastructure",
+                "rules": 0,
+                "subTechniqueRules": 0
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "GET /tenants/{tenantId}/rules/search?q=lsass": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "94f40249-e923-4c4f-94aa-7e94e21b558d",
+            "ruleUid": "3f0c2a10-5d4b-4e8f-9a61-0c1d2e3f4a5b",
+            "name": "LSASS memory access",
+            "severity": "HIGH",
+            "status": "STABLE",
+            "queryLanguage": "xql",
+            "path": "rules/windows/lsass.yml",
+            "tactics": ["TA0006"],
+            "techniques": ["T1003.001"],
+            "validationStatus": "VALID",
+            "repository": {
+              "id": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+              "tenantId": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+              "fullName": "ex-181748/detections",
+              "visibility": "PRIVATE"
+            }
+          }
+        ],
+        "nextCursor": null
+      }
+    },
+    "GET /tenants/{tenantId}/scim-tokens": {
+      "status": 200,
+      "response": {
+        "items": []
+      }
+    },
+    "GET /tenants/{tenantId}/security-policy": {
+      "status": 200,
+      "response": {
+        "requireMfa": false,
+        "acceptedAcr": [],
+        "version": 0
+      }
+    },
+    "GET /tenants/{tenantId}/service-accounts": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "da45d503-5ad6-425f-adbf-d0d2ba49ad7b",
+            "userId": "de60173a-232a-4e78-b038-8ed44640d575",
+            "username": "svc-dab3a09ec84c5842",
+            "name": "ci-pipeline",
+            "description": "CI deploys",
+            "status": "ACTIVE",
+            "createdAt": "2026-11-21T22:34:03.291Z",
+            "updatedAt": "2026-11-21T22:34:03.291Z"
+          }
+        ]
+      }
+    },
+    "GET /tenants/{tenantId}/service-accounts/{serviceAccountId}/api-keys": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "27392918-f3af-4ef2-875f-bf76effa3118",
+            "name": "ci",
+            "displayPrefix": "sep_key_<shown-once>",
+            "status": "ACTIVE",
+            "expiresAt": "2027-02-19T22:34:03.422Z",
+            "lastUsedAt": null,
+            "revokedAt": null,
+            "rotatedFromId": null,
+            "createdAt": "2026-11-21T22:34:03.422Z"
+          }
+        ]
+      }
+    },
+    "GET /tenants/{tenantId}/sso-connection (none configured → 404)": {
+      "status": 404,
+      "response": {
+        "error": {
+          "code": "NOT_FOUND",
+          "message": "No SSO connection",
+          "requestId": "125177ec-f2e6-47d9-8aeb-0dea3fbcd246"
+        }
+      }
+    },
+    "GET /tenants/{tenantId}/subscription": {
+      "status": 200,
+      "response": {
+        "subscription": {
+          "id": "4e59f6ed-de09-42e2-a609-184c83df079d",
+          "plan": {
+            "key": "team",
+            "name": "Team"
+          },
+          "status": "TRIALING",
+          "provider": "manual",
+          "currentPeriodStart": "2026-11-21T22:34:01.813Z",
+          "currentPeriodEnd": "2026-12-05T22:34:01.813Z",
+          "trialEndsAt": "2026-12-05T22:34:01.813Z",
+          "pastDueSince": null,
+          "cancelAtPeriodEnd": false,
+          "requestedPlan": null,
+          "version": 1
+        },
+        "effectivePlan": {
+          "key": "team",
+          "name": "Team",
+          "fallback": false
+        },
+        "entitlements": {
+          "seats.max": 50,
+          "repositories.private.max": 200,
+          "conversions.monthly": 10000,
+          "api.requests.monthly": 2000000,
+          "storage.bytes": 53687091200,
+          "integrations.max": 20,
+          "connectors.max": 10,
+          "audit.retention_days": 365,
+          "sso.enterprise": 0,
+          "identity.scim": 0,
+          "security.mfa_enforcement": 1,
+          "git.dedicated_instance": 0,
+          "deployments.advanced": 1,
+          "api.service_accounts": 20
+        },
+        "overrides": {},
+        "provider": "signed-webhook"
+      }
+    },
+    "GET /tenants/{tenantId}/usage": {
+      "status": 200,
+      "response": {
+        "periodStart": "2026-11-01T00:00:00.000Z",
+        "items": [
+          {
+            "key": "seats.max",
+            "description": "Active human members",
+            "unit": "count",
+            "limit": 50,
+            "used": 2
+          },
+          {
+            "key": "repositories.private.max",
+            "description": "Private and internal repositories",
+            "unit": "count",
+            "limit": 200,
+            "used": 0
+          }
+        ]
+      }
+    },
+    "GET /users/me": {
+      "status": 200,
+      "response": {
+        "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "username": "exowner-5a4ea276",
+        "email": "exowner-5a4ea276@example.test",
+        "displayName": "exowner Test",
+        "memberships": [
+          {
+            "tenant": {
+              "id": "1df3b9b8-5811-406d-ba9b-b5f2d0e4f46b",
+              "slug": "exowner-5a4ea276",
+              "name": "exowner Test",
+              "kind": "INDIVIDUAL",
+              "status": "ACTIVE",
+              "createdAt": "2026-11-21T22:34:01.664Z"
+            },
+            "roles": ["tenant.owner"]
+          }
+        ]
+      }
+    },
+    "GET /users/me (no token → 401)": {
+      "status": 401,
+      "response": {
+        "error": {
+          "code": "UNAUTHENTICATED",
+          "message": "Authentication required",
+          "requestId": "010a1e3d-5058-41a4-b10a-03bb7b478e9a"
+        }
+      }
+    },
+    "GET /users/me/git-tokens": {
+      "status": 200,
+      "response": [
+        {
+          "id": "3c77aac5-33ab-4751-bd82-5f16e25dca7a",
+          "name": "laptop",
+          "displayPrefix": "sep_git_<shown-once>",
+          "scopes": ["git:read", "git:write"],
+          "expiresAt": "2027-02-19T22:34:03.550Z",
+          "lastUsedAt": null,
+          "createdAt": "2026-11-21T22:34:03.550Z"
+        }
+      ]
+    },
+    "GET /users/me/notifications": {
+      "status": 200,
+      "response": {
+        "items": [],
+        "nextCursor": null
+      }
+    },
+    "GET /users/me/sessions": {
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "3e71ba39-c6b5-79e4-d0b4-e47063a98dc9",
+            "ipAddress": "172.27.0.1",
+            "startedAt": "2026-11-21T22:34:01.000Z",
+            "lastAccessAt": "2026-11-21T22:34:01.000Z"
+          },
+          {
+            "id": "b1eb0ead-fd4f-2d8e-06ad-f873af0255e9",
+            "ipAddress": "172.27.0.1",
+            "startedAt": "2026-11-21T22:34:01.000Z",
+            "lastAccessAt": "2026-11-21T22:34:01.000Z"
+          }
+        ],
+        "source": "idp"
+      }
+    },
+    "GET /users/me/ssh-keys": {
+      "status": 200,
+      "response": []
+    },
+    "PATCH /tenants/{tenantId}": {
+      "status": 200,
+      "request": {
+        "name": "Example SOC Team"
+      },
+      "response": {
+        "id": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+        "slug": "ex-181748",
+        "name": "Example SOC Team",
+        "kind": "TEAM",
+        "status": "ACTIVE",
+        "createdAt": "2026-11-21T22:34:01.812Z"
+      }
+    },
+    "POST /organizations": {
+      "status": 201,
+      "request": {
+        "slug": "ex-181748",
+        "name": "Example SOC"
+      },
+      "response": {
+        "tenant": {
+          "id": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+          "slug": "ex-181748",
+          "name": "Example SOC",
+          "kind": "TEAM",
+          "status": "ACTIVE",
+          "createdAt": "2026-11-21T22:34:01.812Z"
+        },
+        "organization": {
+          "id": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+          "tenantId": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+          "slug": "ex-181748",
+          "name": "Example SOC",
+          "description": null,
+          "createdAt": "2026-11-21T22:34:01.812Z"
+        }
+      }
+    },
+    "POST /tenants/{tenantId}/members": {
+      "status": 201,
+      "request": {
+        "username": "exmember-138c23c5"
+      },
+      "response": {
+        "user": {
+          "id": "c7b03327-f289-47b5-8dbc-ebbb6286deef",
+          "username": "exmember-138c23c5",
+          "displayName": "exmember Test"
+        },
+        "status": "ACTIVE",
+        "roles": [
+          {
+            "id": "9a81e27e-1a92-44c7-bc4d-5e5e05936ee7",
+            "roleKey": "tenant.member",
+            "scope": "TENANT",
+            "principalType": "user",
+            "principalId": "c7b03327-f289-47b5-8dbc-ebbb6286deef",
+            "organizationId": null,
+            "teamId": null,
+            "repositoryId": null,
+            "createdAt": "2026-11-21T22:34:02.220Z"
+          }
+        ],
+        "joinedAt": "2026-11-21T22:34:02.220Z"
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/connectors": {
+      "status": 201,
+      "request": {
+        "name": "dc1-agent",
+        "description": "Data centre 1"
+      },
+      "response": {
+        "id": "0959081c-8262-4e28-8496-21cd1fe57afc",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "name": "dc1-agent",
+        "description": "Data centre 1",
+        "status": "ACTIVE",
+        "health": "PENDING",
+        "lastSeenAt": null,
+        "healthChangedAt": null,
+        "createdAt": "2026-11-21T22:34:13.026Z",
+        "updatedAt": "2026-11-21T22:34:13.026Z"
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/connectors/{connectorId}/enrollment-tokens": {
+      "status": 201,
+      "response": {
+        "id": "82a67244-54d1-451a-bc4c-51f7e69363e5",
+        "token": "sep_cet_<shown-once>",
+        "displayPrefix": "sep_cet_<shown-once>",
+        "expiresAt": "2026-11-21T23:34:13.175Z",
+        "gatewayUrl": "https://localhost:18443"
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/conversions": {
+      "status": 202,
+      "request": {
+        "sourceDialect": "splunk:spl",
+        "targetDialect": "cortex-xsiam:xql",
+        "query": "index=windows EventCode=4625 | stats count by user",
+        "mode": "strict"
+      },
+      "response": {
+        "id": "980ffb50-0c6a-49e5-8ec6-0bd91c1a412f",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "sourceDialect": "splunk:spl",
+        "targetDialect": "cortex-xsiam:xql",
+        "mode": "strict",
+        "status": "QUEUED",
+        "source": {
+          "type": "query"
+        },
+        "sourceQuery": "index=windows EventCode=4625 | stats count by user",
+        "fieldMappingSetId": null,
+        "options": {
+          "xqlCaseSensitive": null
+        },
+        "errorCode": null,
+        "createdByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "createdAt": "2026-11-21T22:34:11.414Z",
+        "startedAt": null,
+        "completedAt": null,
+        "result": null
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/conversions (kql → spl, default strict)": {
+      "status": 202,
+      "request": {
+        "sourceDialect": "microsoft-sentinel:kql",
+        "targetDialect": "splunk:spl",
+        "query": "DeviceProcessEvents\n| where FileName =~ \"powershell.exe\" and ProcessCommandLine contains \"-enc\""
+      },
+      "response": {
+        "id": "b9930161-66ce-403e-9923-cf279266c86c",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "sourceDialect": "microsoft-sentinel:kql",
+        "targetDialect": "splunk:spl",
+        "mode": "strict",
+        "status": "QUEUED",
+        "source": {
+          "type": "query"
+        },
+        "sourceQuery": "DeviceProcessEvents\n| where FileName =~ \"powershell.exe\" and ProcessCommandLine contains \"-enc\"",
+        "fieldMappingSetId": null,
+        "options": {
+          "xqlCaseSensitive": null
+        },
+        "errorCode": null,
+        "createdByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "createdAt": "2026-11-21T22:34:11.614Z",
+        "startedAt": null,
+        "completedAt": null,
+        "result": null
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/conversions/validate-query": {
+      "status": 200,
+      "request": {
+        "dialect": "splunk:spl",
+        "query": "index=windows | stats count"
+      },
+      "response": {
+        "dialect": "splunk:spl",
+        "valid": true,
+        "diagnostics": []
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/deployments": {
+      "status": 202,
+      "request": {
+        "integrationId": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+        "repositoryId": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+        "ruleId": "a1984471-47fc-4a7f-be83-dc84f89aebbe"
+      },
+      "response": {
+        "id": "2d20cb54-30c8-44de-8b68-76e32496be3d",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "integrationId": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+        "action": "DEPLOY",
+        "operation": "deploy",
+        "status": "PENDING_APPROVAL",
+        "environment": "PRODUCTION",
+        "executionMode": "DIRECT",
+        "rule": {
+          "repositoryId": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+          "ruleId": "a1984471-47fc-4a7f-be83-dc84f89aebbe",
+          "uid": "7c9e2f41-1a2b-4c3d-8e4f-5a6b7c8d9e0f",
+          "name": "Many failed logons",
+          "severity": "MEDIUM",
+          "commitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+          "blobSha": "c4da5022c6cf577a062cc197bb1c4389911a614e",
+          "dialect": "splunk:spl",
+          "query": "index=windows EventCode=4625 | stats count by user | where count > 20\n"
+        },
+        "rollbackOfId": null,
+        "requiredApprovals": 1,
+        "allowSelfApproval": false,
+        "approvals": [],
+        "requestedByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "externalId": null,
+        "errorCode": null,
+        "attempts": 0,
+        "createdAt": "2026-11-21T22:34:12.607Z",
+        "approvedAt": null,
+        "startedAt": null,
+        "completedAt": null
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/deployments (XQL rule to Splunk → 422)": {
+      "status": 422,
+      "request": {
+        "integrationId": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+        "repositoryId": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+        "ruleId": "94f40249-e923-4c4f-94aa-7e94e21b558d"
+      },
+      "response": {
+        "error": {
+          "code": "RULE_NOT_DEPLOYABLE",
+          "message": "The target accepts splunk:spl rules; convert the rule (Phase 4), commit it and deploy the committed rule",
+          "requestId": "bd362656-c182-4aa9-98ce-b0821309bf8d"
+        }
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/deployments/{deploymentId}/approve (author — rejected)": {
+      "status": 403,
+      "request": {
+        "comment": "self-approval attempt"
+      },
+      "response": {
+        "error": {
+          "code": "APPROVAL_NOT_ALLOWED",
+          "message": "The requester cannot approve their own deployment",
+          "requestId": "169430e8-c251-4120-9248-7f10411d58de"
+        }
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/integrations": {
+      "status": 201,
+      "request": {
+        "name": "Splunk production",
+        "provider": "splunk",
+        "environment": "PRODUCTION",
+        "executionMode": "DIRECT",
+        "config": {
+          "baseUrl": "http://fake-siem:8088",
+          "app": "search"
+        }
+      },
+      "response": {
+        "id": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "name": "Splunk production",
+        "provider": "splunk",
+        "environment": "PRODUCTION",
+        "executionMode": "DIRECT",
+        "connectorId": null,
+        "config": {
+          "app": "search",
+          "owner": "nobody",
+          "baseUrl": "http://fake-siem:8088",
+          "latestTime": "now",
+          "cronSchedule": "*/15 * * * *",
+          "earliestTime": "-20m"
+        },
+        "status": "ACTIVE",
+        "health": "UNKNOWN",
+        "healthCheckedAt": null,
+        "capabilities": ["rule.read", "rule.create"],
+        "credential": null,
+        "version": 1,
+        "createdAt": "2026-11-21T22:34:12.009Z",
+        "updatedAt": "2026-11-21T22:34:12.009Z"
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/integrations/{integrationId}/health-check": {
+      "status": 202,
+      "response": {
+        "integrationId": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+        "queued": true,
+        "connectorJobId": null
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/repositories": {
+      "status": 201,
+      "request": {
+        "name": "detections",
+        "description": "Production detections"
+      },
+      "response": {
+        "id": "6918de89-0559-4f9c-bcf1-33281ea3e4bd",
+        "tenantId": "ae6dd9f7-0bd2-4693-b631-a45b717d0c11",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "owner": "ex-181748",
+        "name": "detections",
+        "fullName": "ex-181748/detections",
+        "description": "Production detections",
+        "visibility": "PRIVATE",
+        "status": "ACTIVE",
+        "defaultBranch": "main",
+        "forkedFromId": null,
+        "cloneUrls": {
+          "https": "http://localhost:13000/git/ex-181748/detections.git",
+          "ssh": "ssh://git@localhost:12222/ex-181748/detections.git"
+        },
+        "createdAt": "2026-11-21T22:34:04.168Z",
+        "updatedAt": "2026-11-21T22:34:04.168Z"
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/repositories (invalid → 400)": {
+      "status": 400,
+      "request": {
+        "name": "../bad name"
+      },
+      "response": {
+        "error": {
+          "code": "VALIDATION_FAILED",
+          "message": "Request validation failed",
+          "requestId": "0ce84ddd-e8bd-4fe7-a411-8f72043e5278",
+          "details": [
+            {
+              "message": "name is not a valid repository name"
+            }
+          ]
+        }
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/teams": {
+      "status": 201,
+      "request": {
+        "slug": "detection",
+        "name": "Detection engineering"
+      },
+      "response": {
+        "id": "8a820d93-fc85-43db-ba97-6599a4ba0280",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "slug": "detection",
+        "name": "Detection engineering",
+        "description": null,
+        "createdAt": "2026-11-21T22:34:02.371Z"
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/teams/{teamId}/members": {
+      "status": 201,
+      "request": {
+        "username": "exmember-138c23c5"
+      },
+      "response": {
+        "user": {
+          "id": "c7b03327-f289-47b5-8dbc-ebbb6286deef",
+          "username": "exmember-138c23c5",
+          "displayName": "exmember Test"
+        },
+        "addedAt": "2026-11-21T22:34:02.573Z"
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/webhooks": {
+      "status": 201,
+      "request": {
+        "url": "http://fake-siem:8088/webhooks/example",
+        "events": ["deployment.succeeded", "conversion.completed"]
+      },
+      "response": {
+        "id": "3071f5df-4895-4a80-a7a2-c6d837f88234",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "url": "http://fake-siem:8088/webhooks/example",
+        "description": null,
+        "events": ["deployment.succeeded", "conversion.completed"],
+        "status": "ACTIVE",
+        "disabledReason": null,
+        "consecutiveFailures": 0,
+        "version": 1,
+        "createdAt": "2026-11-21T22:34:13.370Z",
+        "updatedAt": "2026-11-21T22:34:13.370Z",
+        "secret": "whsec_<shown-once>"
+      }
+    },
+    "POST /tenants/{tenantId}/organizations/{organizationId}/webhooks/{webhookId}/ping": {
+      "status": 202,
+      "response": {
+        "eventId": "cee17c6f-6185-4247-b032-66a91e994219"
+      }
+    },
+    "POST /tenants/{tenantId}/repositories/{repositoryId}/branches": {
+      "status": 201,
+      "request": {
+        "name": "feature/tuning",
+        "from": "main"
+      },
+      "response": {
+        "name": "feature/tuning",
+        "protected": false,
+        "commitSha": "78bce0e60f3119bdc6f6d6b53367e61e56a45b0c",
+        "commitMessage": "Add LSASS detection"
+      }
+    },
+    "POST /tenants/{tenantId}/repositories/{repositoryId}/issues": {
+      "status": 201,
+      "request": {
+        "title": "False positives from EDR scanner",
+        "body": "Tune exclusions."
+      },
+      "response": {
+        "number": 2,
+        "title": "False positives from EDR scanner",
+        "body": "Tune exclusions.",
+        "state": "open",
+        "author": {
+          "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+          "username": "exowner-5a4ea276"
+        },
+        "comments": 0,
+        "createdAt": "2026-11-21T22:34:10Z",
+        "updatedAt": "2026-11-21T22:34:10Z",
+        "closedAt": null
+      }
+    },
+    "POST /tenants/{tenantId}/repositories/{repositoryId}/issues/{number}/comments": {
+      "status": 201,
+      "request": {
+        "body": "Working on it."
+      },
+      "response": {
+        "id": 92,
+        "body": "Working on it.",
+        "author": {
+          "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+          "username": "exowner-5a4ea276"
+        },
+        "createdAt": "2026-11-21T22:34:10Z"
+      }
+    },
+    "POST /tenants/{tenantId}/repositories/{repositoryId}/labels": {
+      "status": 201,
+      "request": {
+        "name": "tuning",
+        "color": "#0e8a16"
+      },
+      "response": {
+        "id": 18,
+        "name": "tuning",
+        "color": "#0e8a16",
+        "description": ""
+      }
+    },
+    "POST /tenants/{tenantId}/repositories/{repositoryId}/pulls": {
+      "status": 201,
+      "request": {
+        "title": "Raise LSASS severity",
+        "head": "feature/tuning-2",
+        "base": "main",
+        "body": "Seen in the wild."
+      },
+      "response": {
+        "number": 1,
+        "title": "Raise LSASS severity",
+        "body": "Seen in the wild.",
+        "state": "open",
+        "author": {
+          "id": "84a9acad-6d3b-421b-8965-acf910476cc0",
+          "username": "exowner-5a4ea276"
+        },
+        "head": "feature/tuning-2",
+        "headSha": "291dde9a92d3633f7e3430f3a6219f88b847100b",
+        "base": "main",
+        "mergeable": true,
+        "mergeCommitSha": null,
+        "mergedBy": null,
+        "mergedAt": null,
+        "createdAt": "2026-11-21T22:34:09Z",
+        "updatedAt": "2026-11-21T22:34:09Z"
+      }
+    },
+    "POST /tenants/{tenantId}/repositories/{repositoryId}/rules/validate": {
+      "status": 200,
+      "request": {
+        "content": "schema: sep.detection/v1\nid: 5a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d\nname: LSASS memory access\ndescription: Handle requests to lsass.exe by unusual processes\nauthor: SOC\nseverity: high\nstatus: stable\nquery:\n  language: xql\n  dialect: cortex-xsiam:xql\n  text: |\n    dataset = xdr_data\n    | filter event_type = ENUM.PROCESS and action_process_image_name = \"lsass.exe\"\nplatforms: [cortex-xsiam]\nmitre:\n  techniques: [T1003.001]\ntelemetry: [process_access]\ndata_sources: [Cortex XDR Agent]\nfalse_positives: [EDR scanners]\nreferences: [https://attack.mitre.org/techniques/T1003/001/]\n"
+      },
+      "response": {
+        "kind": "rule",
+        "validationStatus": "VALID",
+        "issues": [],
+        "rule": {
+          "uid": "5a1b2c3d-4e5f-4a6b-8c7d-9e0f1a2b3c4d",
+          "format": "sep.detection/v1",
+          "name": "LSASS memory access",
+          "description": "Handle requests to lsass.exe by unusual processes",
+          "author": "SOC",
+          "severity": "high",
+          "category": null,
+          "status": "stable",
+          "query": {
+            "language": "xql",
+            "dialect": "cortex-xsiam:xql",
+            "text": "dataset = xdr_data\n| filter event_type = ENUM.PROCESS and action_process_image_name = \"lsass.exe\"\n"
+          },
+          "platforms": ["cortex-xsiam"],
+          "tactics": ["TA0006"],
+          "techniques": ["T1003.001"],
+          "telemetry": ["process_access"],
+          "dataSources": ["Cortex XDR Agent"],
+          "falsePositives": ["EDR scanners"],
+          "references": ["https://attack.mitre.org/techniques/T1003/001/"],
+          "tags": []
+        }
+      }
+    },
+    "POST /tenants/{tenantId}/service-accounts": {
+      "status": 201,
+      "request": {
+        "name": "ci-pipeline",
+        "description": "CI deploys"
+      },
+      "response": {
+        "id": "da45d503-5ad6-425f-adbf-d0d2ba49ad7b",
+        "userId": "de60173a-232a-4e78-b038-8ed44640d575",
+        "username": "svc-dab3a09ec84c5842",
+        "name": "ci-pipeline",
+        "description": "CI deploys",
+        "status": "ACTIVE",
+        "createdAt": "2026-11-21T22:34:03.291Z",
+        "updatedAt": "2026-11-21T22:34:03.291Z"
+      }
+    },
+    "POST /tenants/{tenantId}/service-accounts/{serviceAccountId}/api-keys": {
+      "status": 201,
+      "request": {
+        "name": "ci",
+        "expiresInDays": 90
+      },
+      "response": {
+        "id": "27392918-f3af-4ef2-875f-bf76effa3118",
+        "name": "ci",
+        "displayPrefix": "sep_key_<shown-once>",
+        "status": "ACTIVE",
+        "expiresAt": "2027-02-19T22:34:03.422Z",
+        "lastUsedAt": null,
+        "revokedAt": null,
+        "rotatedFromId": null,
+        "createdAt": "2026-11-21T22:34:03.422Z",
+        "key": "sep_key_<shown-once>"
+      }
+    },
+    "POST /users/me/git-tokens": {
+      "status": 201,
+      "request": {
+        "name": "laptop",
+        "scopes": ["git:read", "git:write"]
+      },
+      "response": {
+        "id": "3c77aac5-33ab-4751-bd82-5f16e25dca7a",
+        "name": "laptop",
+        "displayPrefix": "sep_git_<shown-once>",
+        "scopes": ["git:read", "git:write"],
+        "expiresAt": "2027-02-19T22:34:03.550Z",
+        "lastUsedAt": null,
+        "createdAt": "2026-11-21T22:34:03.550Z",
+        "token": "sep_git_<shown-once>"
+      }
+    },
+    "PUT /tenants/{tenantId}/organizations/{organizationId}/deployment-policy": {
+      "status": 200,
+      "request": {
+        "productionApprovals": 1,
+        "nonProductionApprovals": 0
+      },
+      "response": {
+        "id": "84e72659-5f2c-4123-aa6b-42bad1cde4cf",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "productionApprovals": 1,
+        "nonProductionApprovals": 0,
+        "allowSelfApprovalNonProduction": false,
+        "allowWarningRules": false,
+        "deploymentsEnabled": true,
+        "version": 1,
+        "updatedByUserId": "84a9acad-6d3b-421b-8965-acf910476cc0",
+        "updatedAt": "2026-11-21T22:34:12.475Z"
+      }
+    },
+    "PUT /tenants/{tenantId}/organizations/{organizationId}/integrations/{integrationId}/credential": {
+      "status": 200,
+      "request": {
+        "kind": "splunk_token",
+        "secret": "example-token-not-real"
+      },
+      "response": {
+        "id": "411ef6da-fc10-48b1-a98c-c8011f0ac523",
+        "organizationId": "cb9d684d-6b15-487c-88b0-d9af5678d85e",
+        "name": "Splunk production",
+        "provider": "splunk",
+        "environment": "PRODUCTION",
+        "executionMode": "DIRECT",
+        "connectorId": null,
+        "config": {
+          "app": "search",
+          "owner": "nobody",
+          "baseUrl": "http://fake-siem:8088",
+          "latestTime": "now",
+          "cronSchedule": "*/15 * * * *",
+          "earliestTime": "-20m"
+        },
+        "status": "ACTIVE",
+        "health": "UNKNOWN",
+        "healthCheckedAt": null,
+        "capabilities": ["rule.read", "rule.create"],
+        "credential": {
+          "kind": "splunk_token",
+          "rotatedAt": "2026-11-21T22:34:12.146Z"
+        },
+        "version": 1,
+        "createdAt": "2026-11-21T22:34:12.009Z",
+        "updatedAt": "2026-11-21T22:34:12.148Z"
+      }
+    },
+    "PUT /tenants/{tenantId}/repositories/{repositoryId}/star": {
+      "status": 200,
+      "response": {
+        "starred": true
+      }
+    }
+  }
+}

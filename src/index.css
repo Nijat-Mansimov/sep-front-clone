@@ -1,0 +1,146 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg-canvas: #FFFFFF;
+  --bg-surface: #FFFFFF;
+  --bg-elevated: #FFFFFF;
+  --bg-subtle: #F6F8FA;
+  --bg-header: #F6F8FA;
+  --border-default: #D1D9E0;
+  --border-muted: #E6ECF0;
+  --fg-default: #1F2328;
+  --fg-muted: #59636E;
+  --fg-on-emphasis: #FFFFFF;
+  --brand-primary: #1A7F37;
+  --brand-primary-hover: #15692D;
+  --brand-primary-subtle: #DAFBE1;
+  --accent: #BF8700;
+  --tab-indicator: #FD8C73;
+  --success: #1A7F37;
+  --success-subtle: #DAFBE1;
+  --warning: #9A6700;
+  --warning-subtle: #FFF8C5;
+  --danger: #CF222E;
+  --danger-subtle: #FFEBE9;
+  --info: #0969DA;
+  --info-subtle: #DDF4FF;
+  --sev-critical: #82071E;
+  --sev-high: #CF222E;
+  --sev-medium: #9A6700;
+  --sev-low: #0969DA;
+  --sev-info: #59636E;
+  --hero-canvas: #FFFFFF;
+  --hero-fg: #1F2328;
+  --hero-muted: #59636E;
+  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.dark {
+  --bg-canvas: #0D1117;
+  --bg-surface: #0D1117;
+  --bg-elevated: #161B22;
+  --bg-subtle: #161B22;
+  --bg-header: #010409;
+  --border-default: #30363D;
+  --border-muted: #21262D;
+  --fg-default: #F0F6FC;
+  --fg-muted: #9198A1;
+  --fg-on-emphasis: #FFFFFF;
+  --brand-primary: #238636;
+  --brand-primary-hover: #2EA043;
+  --brand-primary-subtle: #122D1B;
+  --accent: #D29922;
+  --tab-indicator: #F78166;
+  --success: #3FB950;
+  --success-subtle: #122D1B;
+  --warning: #D29922;
+  --warning-subtle: #2B210B;
+  --danger: #F85149;
+  --danger-subtle: #331618;
+  --info: #4493F8;
+  --info-subtle: #13233A;
+  --sev-critical: #FF7B72;
+  --sev-high: #F85149;
+  --sev-medium: #D29922;
+  --sev-low: #4493F8;
+  --sev-info: #9198A1;
+  --hero-canvas: #0D1117;
+  --hero-fg: #F0F6FC;
+  --hero-muted: #9198A1;
+}
+
+html,
+body {
+  background-color: var(--bg-canvas);
+  color: var(--fg-default);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, .font-display {
+  font-family: var(--font-display);
+}
+
+code, pre, .font-mono {
+  font-family: var(--font-mono);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+*:focus-visible {
+  outline: 2px solid var(--info);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.sep-graph-bg {
+  background-color: var(--bg-subtle);
+  background-image:
+    linear-gradient(to right, var(--border-muted) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border-muted) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.sep-spectrum-bar {
+  height: 5px;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.sep-frame-green {
+  box-shadow: 0 0 0 1px var(--border-default), 4px 4px 0 0 #1A7F37;
+}
+
+.dark .sep-frame-green {
+  box-shadow: 0 0 0 1px var(--border-default), 4px 4px 0 0 #238636;
+}
+
+.sep-frame-blue {
+  box-shadow: 0 0 0 1px var(--border-default), 4px 4px 0 0 #2F81F7;
+}
+
+.sep-prose h1 { font-size: 1.5rem; font-weight: 700; margin: 1.25rem 0 0.75rem; }
+.sep-prose h2 { font-size: 1.25rem; font-weight: 600; margin: 1rem 0 0.5rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--border-muted); }
+.sep-prose h3 { font-size: 1.05rem; font-weight: 600; margin: 0.9rem 0 0.4rem; }
+.sep-prose p { margin: 0.5rem 0; line-height: 1.6; }
+.sep-prose ul, .sep-prose ol { margin: 0.5rem 0 0.5rem 1.25rem; list-style: disc; }
+.sep-prose ol { list-style: decimal; }
+.sep-prose code { background: var(--bg-subtle); padding: 0.125rem 0.375rem; border-radius: 4px; font-size: 0.85em; }
+.sep-prose pre { background: var(--bg-subtle); border: 1px solid var(--border-default); border-radius: 6px; padding: 0.75rem 1rem; overflow-x: auto; margin: 0.75rem 0; }
+.sep-prose pre code { background: transparent; padding: 0; }
+.sep-prose a { color: var(--info); text-decoration: underline; }
+.sep-prose blockquote { border-left: 3px solid var(--border-default); padding-left: 0.75rem; color: var(--fg-muted); margin: 0.75rem 0; }

@@ -1,0 +1,6 @@
+{
+  "name": "Security Engineering Platform",
+  "description": "Multi-tenant detection engineering platform for rules-as-code, MITRE ATT&CK coverage, query conversion, and approval-gated SIEM deployments.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
